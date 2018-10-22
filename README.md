@@ -1,1 +1,1 @@
-XMPP based messaging server.
+XMPP based message server.
