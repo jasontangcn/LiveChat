@@ -7,7 +7,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 
 /**
- * @author Jason Tang
+ * @author TomHornson@hotmail.com
  */
 public interface Acceptor extends SocketHandler {
 	public ServerSocketChannel getServerChannel();
