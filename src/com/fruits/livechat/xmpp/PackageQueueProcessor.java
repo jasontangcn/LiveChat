@@ -22,7 +22,7 @@ public class PackageQueueProcessor implements Runnable {
 		return processor;
 	}
 
-	private PackageQueue packageQ = null;
+	private PackageQueue packageQ;
 	private Map<String, PackageHandler> handlers = new HashMap<String, PackageHandler>();
 
 	public PackageQueueProcessor(PackageQueue packageQ) {

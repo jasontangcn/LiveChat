@@ -23,7 +23,7 @@ import com.fruits.livechat.xmpp.protocal.StreamHandlerImpl;
  * @author Jason Tang
  */
 public class ServiceImpl implements Service {
-	private Configuration config = null;
+	private Configuration config;
 	private Reactor reactor = null;
 	private Map<String, Session> sessions = new HashMap<String, Session>();
 

@@ -14,9 +14,9 @@ import com.fruits.livechat.server.IOHandler;
  * @author Jason Tang
  */
 public class IOHandlerImpl implements IOHandler {
-	private Selector selector = null;
-	private SocketChannel socketChannel = null;
-	private DataPort dataPort = null;
+	private Selector selector;
+	private SocketChannel socketChannel;
+	private DataPort dataPort;
 
 	public IOHandlerImpl(Selector selector, SocketChannel socketChannel, DataPort dataPort) throws Exception {
 		this.selector = selector;

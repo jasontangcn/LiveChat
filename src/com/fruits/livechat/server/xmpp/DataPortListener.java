@@ -10,7 +10,7 @@ import java.util.EventObject;
  * @author Jason Tang
  */
 public interface DataPortListener extends EventListener {
-	public static final int DATA_PORT_OPENED = 1 << 0;
+	public static final int DATA_PORT_OPENED = 1;
 	public static final int DATA_PORT_FINISH_READING = 1 << 1;
 	public static final int DATA_PORT_FINISH_WRITING = 1 << 2;
 	public static final int DATA_PORT_CLOSED = 1 << 3;

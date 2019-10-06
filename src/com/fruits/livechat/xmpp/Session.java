@@ -20,13 +20,13 @@ import com.fruits.livechat.util.BufferUtil;
  * @author Jason Tang
  */
 public class Session implements DataPortListener {
-	private String sessionId = null;
+	private String sessionId;
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	private boolean isClosed = false;
 
-	DataPort dataPort = null;
+	DataPort dataPort;
 
-	private ProtocalParser parser = null;
+	private ProtocalParser parser;
 
 	public Session(String sessionId) throws Exception {
 		this.sessionId = sessionId;

@@ -44,8 +44,8 @@ public class SASLHandler implements IOHandler {
 
 	// Base64 is cmVhbG09Imphc29udGFuZyIsbm9uY2U9Ik9BNk1HOXRFUUdtMmhoIixxb3A9ImF1dGgiLGNoYXJzZXQ9dXRmLTgsYWxnb3JpdGhtPW1kNS1zZXNz
 
-	private Selector selector = null;
-	private SocketChannel socketChannel = null;
+	private Selector selector;
+	private SocketChannel socketChannel;
 
 	private Reader reader = new Reader();
 	private Writer writer = new Writer();

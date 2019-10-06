@@ -13,8 +13,8 @@ import com.fruits.livechat.Constants;
  */
 public class DataPortImpl implements DataPort {
 	// replace them with self-increasing-buffer
-	private ByteBuffer readBuffer = null;
-	private ByteBuffer writeBuffer = null;
+	private ByteBuffer readBuffer;
+	private ByteBuffer writeBuffer;
 	private List<DataPortListener> listeners = new ArrayList<DataPortListener>();
 	private boolean closed = false;
 	private boolean readBufferExpectWrite;
@@ -42,7 +42,7 @@ public class DataPortImpl implements DataPort {
 		readBuffer.flip();
 		setReadBufferExpectWrite(false);
 
-		EventObject event = new EventObject(Integer.valueOf(DataPortListener.DATA_PORT_FINISH_READING));
+		EventObject event = new EventObject(DataPortListener.DATA_PORT_FINISH_READING);
 		for (DataPortListener listener : listeners) {
 			listener.emitEvent(event);
 		}
@@ -90,7 +90,7 @@ public class DataPortImpl implements DataPort {
 		writeBuffer.compact();
 		setWriteBufferExpectRead(false);
 
-		EventObject event = new EventObject(Integer.valueOf(DataPortListener.DATA_PORT_FINISH_WRITING));
+		EventObject event = new EventObject(DataPortListener.DATA_PORT_FINISH_WRITING);
 		for (DataPortListener listener : listeners) {
 			listener.emitEvent(event);
 		}

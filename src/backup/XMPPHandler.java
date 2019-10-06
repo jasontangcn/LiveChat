@@ -16,8 +16,8 @@ import com.fruits.livechat.util.SelfIncreasingByteBuffer;
  * @author Jason Tang
  */
 public class XMPPHandler implements IOHandler {
-	private Selector selector = null;
-	private SocketChannel socketChannel = null;
+	private Selector selector;
+	private SocketChannel socketChannel;
 	private InputHandler input = new InputHandler();
 	private OutputHandler output = new OutputHandler();
 

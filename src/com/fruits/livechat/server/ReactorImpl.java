@@ -14,7 +14,7 @@ import java.util.Set;
  */
 public class ReactorImpl implements Reactor, Runnable {
 	private Thread reactorThread = null;
-	private SocketAddress addr = null;
+	private SocketAddress addr;
 	private ServerSocketChannel serverChannel = null;
 	private Selector selector = null;
 	private Acceptor acceptor;

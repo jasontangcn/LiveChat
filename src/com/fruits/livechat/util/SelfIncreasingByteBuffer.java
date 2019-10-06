@@ -11,8 +11,8 @@ import java.nio.charset.Charset;
  * @author Jason Tang
  */
 public class SelfIncreasingByteBuffer {
-	private Charset charset = null;
-	private ByteBuffer buff = null;
+	private Charset charset;
+	private ByteBuffer buff;
 
 	public SelfIncreasingByteBuffer(String charsetName, int capacity) {
 		charset = Charset.forName(charsetName);
