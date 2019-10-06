@@ -69,10 +69,9 @@ public class PackageQueueProcessor implements Runnable {
 				}
 			}
 
-			if (null == handler)
+			if (null == handler) {
 				System.out.println("No handler found for package of type: " + tagName);
-
-			if (null != handler) {
+			} else {
 				try {
 					System.out.println("Handler: " + handler + " selected for package of type " + tagName + " or namespace of " + ns + ".");
 					handler.handle(pkg);

@@ -16,7 +16,7 @@ public class DataPortImpl implements DataPort {
 	private ByteBuffer readBuffer = null;
 	private ByteBuffer writeBuffer = null;
 	private List<DataPortListener> listeners = new ArrayList<DataPortListener>();
-	private boolean isClosed = false;
+	private boolean closed = false;
 	private boolean readBufferExpectWrite;
 	private boolean writeBufferExpectRead;
 
@@ -131,10 +131,10 @@ public class DataPortImpl implements DataPort {
 	}
 
 	public void close() {
-		this.isClosed = true;
+		this.closed = true;
 	}
 
 	public boolean isClosed() {
-		return this.isClosed;
+		return this.closed;
 	}
 }

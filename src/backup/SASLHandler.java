@@ -31,6 +31,11 @@ public class SASLHandler implements IOHandler {
 	public final static String saslServerName = "jasontang";
 	public final static String saslQOP = "auth";
 
+	public final static int SASL_STEP_ONE = 1;
+    public final static int SASL_STEP_THREE = 3;
+    public final static int SASL_STEP_FIVE = 5;
+    public final static int SASL_STEP_SEVEN = 7;
+
 	private static String step1rsp = "<?xml version=\"1.0\"?>"
 	+ "<stream:stream xmlns=\"jabber:client\" xmlns:stream=\"http://etherx.jabber.org/streams\" id=\"c2s_234\" from=\"jasontang\" version=\"1.0\">" 
 			+ "<stream:features>" 
@@ -53,7 +58,7 @@ public class SASLHandler implements IOHandler {
 	private ByteBuffer writeBuff = ByteBuffer.allocate(10240);
 
 	private SaslServer saslServer;
-	private int step = 1;
+	private int step = SASL_STEP_ONE;
 
 	public SASLHandler(Selector selector, SocketChannel socketChannel) throws Exception {
 		this.selector = selector;
@@ -119,29 +124,29 @@ public class SASLHandler implements IOHandler {
 
 				writeBuff.clear();
 
-				if (1 == step) {
+				if (SASL_STEP_ONE == step) {
 					writeBuff.put(step1rsp.getBytes(charset));
-					step += 2;
+					step = SASL_STEP_THREE;
 					// client performes 2th step.
-				} else if (3 == step) {
+				} else if (SASL_STEP_THREE == step) {
 					// JDK implement indicates DIGEST-MD5 must not have an initial response.
 					// But in rfc 3920,its recommend that client send a initial response.
 					// String crsp = PullProtocalParser.pullProtocalParser.getContent(read.toString(),"auth");
-					StringBuilder rsp = new StringBuilder().append("<challenge xmlns=\"urn:ietf:params:xml:ns:xmpp-sasl\">").append(Base64.encode(saslServer.evaluateResponse(new byte[0]))).append("</challenge>");
+					StringBuilder responseXml = new StringBuilder().append("<challenge xmlns=\"urn:ietf:params:xml:ns:xmpp-sasl\">").append(Base64.encode(saslServer.evaluateResponse(new byte[0]))).append("</challenge>");
 
-					writeBuff.put(rsp.toString().getBytes());
-					step += 2;
-				} else if (5 == step) {
+					writeBuff.put(responseXml.toString().getBytes());
+					step = SASL_STEP_FIVE;
+				} else if (SASL_STEP_FIVE == step) {
 					String crsp = PullProtocalParser.pullProtocalParser.getContent(read.toString(), "response");
 					System.out.println(crsp);
-					StringBuilder rsp = new StringBuilder().append("<challenge xmlns=\"urn:ietf:params:xml:ns:xmpp-sasl\">").append(Base64.encode(saslServer.evaluateResponse(Base64.decode(crsp)))).append("</challenge>");
+					StringBuilder responseXml = new StringBuilder().append("<challenge xmlns=\"urn:ietf:params:xml:ns:xmpp-sasl\">").append(Base64.encode(saslServer.evaluateResponse(Base64.decode(crsp)))).append("</challenge>");
 
-					writeBuff.put(rsp.toString().getBytes());
+					writeBuff.put(responseXml.toString().getBytes());
 
-					step += 2;
-				} else if (7 == step) {
-					String rsp = "<success xmlns=\"urn:ietf:params:xml:ns:xmpp-sasl\"/>";
-					writeBuff.put(rsp.getBytes());
+					step = SASL_STEP_SEVEN;
+				} else if (SASL_STEP_SEVEN == step) {
+					String responseXml = "<success xmlns=\"urn:ietf:params:xml:ns:xmpp-sasl\"/>";
+					writeBuff.put(responseXml.getBytes());
 				}
 
 				writeBuff.flip();

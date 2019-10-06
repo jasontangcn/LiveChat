@@ -33,19 +33,18 @@ public class ServiceImpl implements Service {
 	}
 
 	private void init() {
-		PackageQueueProcessor pqp = PackageQueueProcessor.getProcessor();
+		PackageQueueProcessor pkgProcessor = PackageQueueProcessor.getProcessor();
 		PackageHandler saslHander = new SaslHandlerImpl();
 		PackageHandler streamHandler = new StreamHandlerImpl();
-		pqp.addPackageHandler("urn:ietf:params:xml:ns:xmpp-sasl", saslHander);
-		pqp.addPackageHandler("stream:stream", streamHandler);
-		Thread pqpThread = new Thread(pqp);
-		pqpThread.start();
+		pkgProcessor.addPackageHandler("urn:ietf:params:xml:ns:xmpp-sasl", saslHander);
+		pkgProcessor.addPackageHandler("stream:stream", streamHandler);
+		Thread pkgProcessorThread = new Thread(pkgProcessor);
+		pkgProcessorThread.start();
 	}
 
 	public DataPort newDataPort() throws Exception {
 		String sessionId = UUID.randomUUID().toString();
-		Session session = null;
-		session = new Session(sessionId);
+		Session session = new Session(sessionId);
 
 		sessions.put(sessionId, session);
 		return session.getDataPort();

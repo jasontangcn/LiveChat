@@ -33,10 +33,9 @@ public class SaslHandlerImpl implements PackageHandler {
 	public final static String SASL_AUTHING = "SASL_AUTHING";
 	public final static String SASL_AUTHED = "SASL_AUTHED";
 	public final static String SASL_CURRENT_STEP = "SASL_CURRENT_STEP";
-	public final static String SASL_STEP1 = "SASL_STEP1";
-	public final static String SASL_STEP3 = "SASL_STEP3";
-	public final static String SASL_STEP5 = "SASL_STEP5";
-	public final static String SASL_STEP7 = "SASL_STEP7";
+	public final static String SASL_STEP_ONE = "SASL_STEP_ONE";
+	public final static String SASL_STEP_THREE = "SASL_STEP_THREE";
+	public final static String SASL_STEP_FIVE = "SASL_STEP_FIVE";
 	public final static String SASL_SERVER = "SASL_SERVER";
 
 	private PackageHandler nextHandler = null;
@@ -53,7 +52,7 @@ public class SaslHandlerImpl implements PackageHandler {
 
 		String authState = (String) session.getAttribute(SASL_STATE);
 		if ((null == authState) || (!SASL_AUTHED.equalsIgnoreCase(authState))) {
-			System.out.println("SASL performing...");
+			System.out.println("SASL performing.");
 
 			XmlTag tag = pkg.getXmlTag();
 			String tagName = tag.getLocalName();
@@ -66,10 +65,10 @@ public class SaslHandlerImpl implements PackageHandler {
 
 					Map<String, String> props = new HashMap<String, String>();
 					props.put(Sasl.QOP, SASL_QOP);
-					CallbackHandler cbh = new CallbackHandlerImpl();
-					SaslServer saslServer = Sasl.createSaslServer(SASL_MECHANISHM_DIGEST_MD5, SASL_PROTOCAL, Constants.SERVER_NAME, props, cbh);
+					CallbackHandler callbackHandler = new CallbackHandlerImpl();
+					SaslServer saslServer = Sasl.createSaslServer(SASL_MECHANISHM_DIGEST_MD5, SASL_PROTOCAL, Constants.SERVER_NAME, props, callbackHandler);
 					session.setAttribute(SASL_STATE, SASL_AUTHING);
-					session.setAttribute(SASL_CURRENT_STEP, SASL_STEP3);
+					session.setAttribute(SASL_CURRENT_STEP, SASL_STEP_THREE);
 					session.setAttribute(SASL_SERVER, saslServer);
 					StringBuilder responseXml = new StringBuilder();
 					responseXml.append("<challenge xmlns=\"urn:ietf:params:xml:ns:xmpp-sasl\">").append(Base64.encode(saslServer.evaluateResponse(new byte[0]))).append("</challenge>");
@@ -81,13 +80,13 @@ public class SaslHandlerImpl implements PackageHandler {
 
 				if (tag instanceof XmlNode) {
 					XmlNode node = (XmlNode) tag;
-					if ((0 < node.getChildrenCount()) && SASL_STEP3.equalsIgnoreCase(currentStep)) {
+					if ((0 < node.getChildrenCount()) && SASL_STEP_THREE.equalsIgnoreCase(currentStep)) {
 						String clientResponse = (String) ((XmlNode) tag).getChildAt(0);
 						StringBuilder responseXml = new StringBuilder();
 						responseXml.append("<challenge xmlns=\"urn:ietf:params:xml:ns:xmpp-sasl\">").append(Base64.encode(saslServer.evaluateResponse(Base64.decode(clientResponse)))).append("</challenge>");
-						session.setAttribute(SASL_CURRENT_STEP, SASL_STEP5);
+						session.setAttribute(SASL_CURRENT_STEP, SASL_STEP_FIVE);
 						PackageDeliver.responseClient(session, responseXml.toString());
-					} else if (SASL_STEP5.equalsIgnoreCase(currentStep)) {
+					} else if (SASL_STEP_FIVE.equalsIgnoreCase(currentStep)) {
 						StringBuilder responseXml = new StringBuilder();
 						responseXml.append("<success xmlns=\"urn:ietf:params:xml:ns:xmpp-sasl\"/>");
 						session.removeAttribute(SASL_CURRENT_STEP);
@@ -99,7 +98,7 @@ public class SaslHandlerImpl implements PackageHandler {
 							System.out.println(se);
 						}
 						session.setAttribute(SASL_STATE, SASL_AUTHED);
-						System.out.println("Sasl succeeded...");
+						System.out.println("SASL succeeded.");
 					}
 				}
 			}
